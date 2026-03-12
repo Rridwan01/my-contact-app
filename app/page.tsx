@@ -1,65 +1,167 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useRef, useState } from "react";
+import { sendContactEmail } from "./action";
+import {
+  MessageCircle,
+  Facebook,
+  Linkedin,
+  Instagram,
+  ExternalLink,
+} from "lucide-react";
+import { Toaster, toast } from "react-hot-toast";
+
+export default function PersonalLandingPage() {
+  const formRef = useRef<HTMLFormElement>(null);
+  const [isPending, setIsPending] = useState(false);
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setIsPending(true);
+
+    const formData = new FormData(e.currentTarget);
+    const result = await sendContactEmail(formData);
+
+    setIsPending(false);
+
+    if (result?.success) {
+      toast.success("Message sent successfully!"); // <-- Modern success toast
+      formRef.current?.reset();
+    } else {
+      toast.error("Failed to send message. Please try again."); // <-- Modern error toast
+    }
+  }
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <main className="min-h-screen flex items-center justify-center p-4 sm:p-8 bg-slate-950 bg-[radial-gradient(ellipse_at_top,var(--tw-gradient-stops))] from-slate-800 via-slate-950 to-slate-950">
+      {/* This renders the popup notifications */}
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          style: {
+            background: "#1e293b",
+            color: "#fff",
+          },
+        }}
+      />
+
+      <div className="bg-slate-900/80 backdrop-blur-sm p-8 rounded-3xl shadow-2xl border border-slate-800 max-w-md w-full">
+        <div className="text-center mb-6">
+          <div className="w-24 h-24 bg-slate-800 rounded-full mx-auto mb-4 overflow-hidden border-4 border-slate-700 shadow-lg">
+            <div className="w-full h-full flex items-center justify-center bg-slate-800 text-slate-400 font-medium">
+              <img src="/image.png" alt="profile image" />
+            </div>
+          </div>
+          <h1 className="text-2xl font-bold text-white tracking-tight">
+            BABALAWO IFAWUYI
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="text-cyan-500 font-medium text-sm mt-1">
+            Consultation & Guidance
+          </p>
+          <p className="text-slate-400 text-sm mt-3 px-4 leading-relaxed">
+            For consultations, spiritual guidance, and traditional Ifá
+            divination, Consultations are available by appointment. Please send
+            a message to schedule a suitable time.
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
+
+        {/* Social Icons Row */}
+        <div className="flex justify-center gap-4 mb-8">
           <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="#"
+            className="p-2 bg-slate-800 rounded-full text-slate-400 hover:text-cyan-400 hover:bg-slate-700 transition-all"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
+            <Facebook size={20} />
           </a>
+          {/* <a href="#" className="p-2 bg-slate-800 rounded-full text-slate-400 hover:text-cyan-400 hover:bg-slate-700 transition-all">
+            <Linkedin size={20} />
+          </a> */}
           <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="#"
+            className="p-2 bg-slate-800 rounded-full text-slate-400 hover:text-cyan-400 hover:bg-slate-700 transition-all"
           >
-            Documentation
+            <Instagram size={20} />
           </a>
         </div>
-      </main>
-    </div>
+
+        {/* Quick Links (Linktree Style) */}
+        <div className="space-y-3 mb-8">
+          {/* WhatsApp Button */}
+          <a
+            href="https://wa.me/234XXXXXXXXXX"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full flex items-center justify-between px-4 py-3 bg-green-600/10 border border-green-500/30 text-green-400 rounded-xl hover:bg-green-600/20 transition-all"
+          >
+            <span className="flex items-center gap-3 font-medium">
+              <MessageCircle size={20} /> Chat on WhatsApp
+            </span>
+            <ExternalLink size={16} className="opacity-50" />
+          </a>
+
+          {/* <a 
+            href="#"
+            className="w-full flex items-center justify-between px-4 py-3 bg-slate-800 border border-slate-700 text-slate-200 rounded-xl hover:bg-slate-700 transition-all"
+          >
+            <span className="font-medium">View My Portfolio</span>
+            <ExternalLink size={16} className="opacity-50 text-slate-400" />
+          </a> */}
+        </div>
+
+        {/* Divider */}
+        <div className="flex items-center gap-3 mb-6">
+          <div className="flex-1 h-px bg-slate-800"></div>
+          <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">
+            Or Send an Email
+          </span>
+          <div className="flex-1 h-px bg-slate-800"></div>
+        </div>
+
+        {/* Contact Form */}
+        <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <input
+              type="text"
+              name="senderName"
+              required
+              className="w-full px-4 py-3 bg-slate-950/50 border border-slate-800 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500/50 transition-all text-sm placeholder:text-slate-600"
+              placeholder="Your Name"
+            />
+          </div>
+
+          <div>
+            <input
+              type="email"
+              name="senderEmail"
+              required
+              className="w-full px-4 py-3 bg-slate-950/50 border border-slate-800 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500/50 transition-all text-sm placeholder:text-slate-600"
+              placeholder="Your Email"
+            />
+          </div>
+
+          <div>
+            <textarea
+              name="message"
+              required
+              rows={3}
+              className="w-full px-4 py-3 bg-slate-950/50 border border-slate-800 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500/50 transition-all text-sm resize-none placeholder:text-slate-600"
+              placeholder="Have questions or need spiritual guidance?"
+            ></textarea>
+          </div>
+
+          <button
+            type="submit"
+            disabled={isPending}
+            className={`w-full text-white font-medium py-3 rounded-xl transition-all shadow-lg ${
+              isPending
+                ? "bg-cyan-900/50 text-cyan-500 cursor-not-allowed"
+                : "bg-cyan-600 hover:bg-cyan-500 hover:shadow-cyan-500/20"
+            }`}
+          >
+            {isPending ? "Sending..." : "Send Message"}
+          </button>
+        </form>
+      </div>
+    </main>
   );
 }
