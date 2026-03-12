@@ -13,7 +13,7 @@ export async function sendContactEmail(formData: FormData) {
 
   try {
     await resend.emails.send({
-      from: 'Contact Form <onboarding@resend.dev>', // Use your verified domain in production
+      from: 'Consultation Form <consultation@babalawoifawuyi.com>',
       to: OWNER_EMAIL, 
       replyTo: senderEmail, 
       subject: `New Message from ${senderName}`,
