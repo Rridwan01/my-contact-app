@@ -3,7 +3,6 @@
 import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-// The single owner's email is stored securely in your .env file
 const OWNER_EMAIL = process.env.OWNER_EMAIL as string; 
 
 export async function sendContactEmail(formData: FormData) {
