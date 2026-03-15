@@ -88,7 +88,7 @@ export default function PersonalLandingPage() {
         <div className="space-y-3 mb-8">
           {/* WhatsApp Button */}
           <a
-            href="https://wa.me/2347044237704"
+            href="https://api.whatsapp.com/send?phone=2347044237704"
             target="_blank"
             rel="noopener noreferrer"
             className="w-full flex items-center justify-between px-4 py-3 bg-green-600/10 border border-green-500/30 text-green-400 rounded-xl hover:bg-green-600/20 transition-all"
