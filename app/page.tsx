@@ -68,14 +68,11 @@ export default function PersonalLandingPage() {
         {/* Social Icons Row */}
         <div className="flex justify-center gap-4 mb-8">
           <a
-            href="#"
+            href="https://www.facebook.com/share/1C1TCsaGYH/?mibextid=wwXIfr"
             className="p-2 bg-slate-800 rounded-full text-slate-400 hover:text-cyan-400 hover:bg-slate-700 transition-all"
           >
             <Facebook size={20} />
           </a>
-          {/* <a href="#" className="p-2 bg-slate-800 rounded-full text-slate-400 hover:text-cyan-400 hover:bg-slate-700 transition-all">
-            <Linkedin size={20} />
-          </a> */}
           <a
             href="#"
             className="p-2 bg-slate-800 rounded-full text-slate-400 hover:text-cyan-400 hover:bg-slate-700 transition-all"
@@ -99,13 +96,6 @@ export default function PersonalLandingPage() {
             <ExternalLink size={16} className="opacity-50" />
           </a>
 
-          {/* <a 
-            href="#"
-            className="w-full flex items-center justify-between px-4 py-3 bg-slate-800 border border-slate-700 text-slate-200 rounded-xl hover:bg-slate-700 transition-all"
-          >
-            <span className="font-medium">View My Portfolio</span>
-            <ExternalLink size={16} className="opacity-50 text-slate-400" />
-          </a> */}
         </div>
 
         {/* Divider */}
