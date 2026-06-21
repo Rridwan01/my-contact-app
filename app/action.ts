@@ -8,15 +8,22 @@ const OWNER_EMAIL = process.env.OWNER_EMAIL as string;
 export async function sendContactEmail(formData: FormData) {
   const senderName = formData.get('senderName') as string;
   const senderEmail = formData.get('senderEmail') as string;
-  const message = formData.get('message') as string;
+  const readingType = formData.get('readingType') as string;
+  const price = formData.get('price') as string;
+  const senderMessage = formData.get('senderMessage') as string;
 
   try {
+    let emailText = `Name: ${senderName}\nEmail: ${senderEmail}\n\nRequested Reading: ${readingType}\nPrice: $${price}`;
+    if (senderMessage && senderMessage.trim()) {
+      emailText += `\n\nMessage:\n${senderMessage}`;
+    }
+
     await resend.emails.send({
       from: 'Consultation Form <consultation@babalawoifawuyi.com>',
       to: OWNER_EMAIL, 
       replyTo: senderEmail, 
-      subject: `New Message from ${senderName}`,
-      text: `Name: ${senderName}\nEmail: ${senderEmail}\n\nMessage:\n${message}`,
+      subject: `New Reading Request from ${senderName}`,
+      text: emailText,
     });
 
     return { success: true };

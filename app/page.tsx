@@ -5,21 +5,51 @@ import { sendContactEmail } from "./action";
 import {
   MessageCircle,
   Facebook,
-  Linkedin,
   Instagram,
   ExternalLink,
+  Sparkles,
+  CheckCircle2,
+  Hand,
+  Video,
 } from "lucide-react";
 import { Toaster, toast } from "react-hot-toast";
+
+const TarotCardIcon = ({ size = 20 }: { size?: number }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <rect x="5" y="3" width="14" height="18" rx="2" />
+    <path d="M12 8a4.5 4.5 0 0 0 0 9 3.5 3.5 0 0 1 0-9Z" fill="currentColor" />
+    <circle cx="12" cy="6" r="0.5" fill="currentColor" stroke="none" />
+    <circle cx="12" cy="18" r="0.5" fill="currentColor" stroke="none" />
+  </svg>
+);
+
+const readingOptions = [
+  { id: 'card', title: 'Card Reading', description: 'Gain clarity and guidance through intuitive card spreads that reveal hidden paths and insights.', price: 30, icon: TarotCardIcon },
+  { id: 'palm', title: 'Palm Reading', description: 'Discover the map of your life, character traits, and future possibilities written in your hands.', price: 50, icon: Hand },
+  { id: 'live', title: 'Live Consultation', description: 'A personal one-on-one session for deep traditional Ifá guidance, spiritual wisdom, and solution-seeking.', price: 70, icon: Video },
+];
 
 export default function PersonalLandingPage() {
   const formRef = useRef<HTMLFormElement>(null);
   const [isPending, setIsPending] = useState(false);
+  const [selectedReading, setSelectedReading] = useState(readingOptions[0]);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsPending(true);
 
     const formData = new FormData(e.currentTarget);
+    formData.append("readingType", selectedReading.title);
+    formData.append("price", selectedReading.price.toString());
     const result = await sendContactEmail(formData);
 
     setIsPending(false);
@@ -131,12 +161,48 @@ export default function PersonalLandingPage() {
 
           <div>
             <textarea
-              name="message"
-              required
+              name="senderMessage"
               rows={3}
-              className="w-full px-4 py-3 bg-slate-950/50 border border-slate-800 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500/50 transition-all text-sm resize-none placeholder:text-slate-600"
-              placeholder="Have questions or need spiritual guidance?"
-            ></textarea>
+              className="w-full px-4 py-3 bg-slate-950/50 border border-slate-800 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500/50 transition-all text-sm placeholder:text-slate-600 resize-none"
+              placeholder="Additional Message (Optional)"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-400 mb-3">Select Reading Type</label>
+            <div className="grid grid-cols-1 gap-3">
+              {readingOptions.map((option) => {
+                const Icon = option.icon;
+                const isSelected = selectedReading.id === option.id;
+                return (
+                  <div
+                    key={option.id}
+                    onClick={() => setSelectedReading(option)}
+                    className={`relative flex items-center p-4 rounded-xl border cursor-pointer transition-all ${
+                      isSelected
+                        ? "bg-cyan-900/30 border-cyan-500 shadow-[0_0_15px_rgba(6,182,212,0.15)]"
+                        : "bg-slate-950/50 border-slate-800 hover:border-slate-700 hover:bg-slate-900/50"
+                    }`}
+                  >
+                    <div className={`p-3 rounded-lg mr-4 flex-shrink-0 ${isSelected ? 'bg-cyan-500/20 text-cyan-400' : 'bg-slate-800 text-slate-400'}`}>
+                      <Icon size={20} />
+                    </div>
+                    <div className="flex-1 min-w-0 pr-4">
+                      <h3 className={`font-medium truncate ${isSelected ? 'text-white' : 'text-slate-300'}`}>{option.title}</h3>
+                      <p className="text-xs text-slate-500 mt-1 truncate">{option.description}</p>
+                    </div>
+                    <div className={`font-semibold whitespace-nowrap ${isSelected ? 'text-cyan-400' : 'text-slate-400'}`}>
+                      ${option.price}
+                    </div>
+                    {isSelected && (
+                      <div className="absolute top-2 right-2 text-cyan-400">
+                        <CheckCircle2 size={16} />
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
           </div>
 
           <button
